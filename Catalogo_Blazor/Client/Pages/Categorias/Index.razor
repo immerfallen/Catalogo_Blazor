@@ -1,0 +1,72 @@
+﻿@page "/categoria"
+@inject HttpClient http
+
+<h2>Categorias</h2>
+
+@if (categorias == null)
+{
+    <p><em>Não existem categorias cadastradas...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Categoria</th>
+                <th>Descrição</th>
+                <th>Editar</th>
+                <th>Deletar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Categoria categoria in categorias)
+            {
+                <tr>
+                    <td>@categoria.Nome</td>
+                    <td>@categoria.Descricao</td>
+                    <td>
+                        <a class="btn btn-primary">Editar</a>
+                    </td>
+                    <td><a class="btn btn-danger">Deletar</a></td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+
+    <div>
+        <a class="btn btn-success">Criar Categoria</a>
+    </div>
+}
+
+@code {
+
+    public Categoria[] categorias { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CarregaCategorias();
+    }
+
+    async Task CarregaCategorias()
+    {
+        //categorias = await http.GetFromJsonAsync<Categoria[]>("/api/categoria");
+
+        categorias = new Categoria[]
+        {
+            new Categoria()
+            {
+                CategoriaId=1,
+                Nome = "Eletrônicos",
+                Descricao = "Produtos Eletrônicos"
+            },
+            new Categoria()
+            {
+                CategoriaId=2,
+                Nome = "Jogos",
+                Descricao = "Jogos Eletrônicos"
+            }
+        };
+    }
+
+}
