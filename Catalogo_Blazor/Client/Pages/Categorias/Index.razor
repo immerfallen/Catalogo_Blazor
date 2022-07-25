@@ -34,10 +34,11 @@ else
         </tbody>
     </table>
 
-    <div>
-        <a class="btn btn-success">Criar Categoria</a>
-    </div>
 }
+
+<div>
+    <a class="btn btn-success" href="categoria/create">Criar Categoria</a>
+</div>
 
 @code {
 
@@ -50,23 +51,8 @@ else
 
     async Task CarregaCategorias()
     {
-        //categorias = await http.GetFromJsonAsync<Categoria[]>("/api/categoria");
+        categorias = await http.GetFromJsonAsync<Categoria[]>("api/categoria/todas");
 
-        categorias = new Categoria[]
-        {
-            new Categoria()
-            {
-                CategoriaId=1,
-                Nome = "Eletrônicos",
-                Descricao = "Produtos Eletrônicos"
-            },
-            new Categoria()
-            {
-                CategoriaId=2,
-                Nome = "Jogos",
-                Descricao = "Jogos Eletrônicos"
-            }
-        };
     }
 
 }
