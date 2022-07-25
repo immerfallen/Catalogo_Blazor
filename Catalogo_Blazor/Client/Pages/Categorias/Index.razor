@@ -27,20 +27,25 @@ else
                     <td>
                         <a class="btn btn-primary" href="categoria/edit/@categoria.CategoriaId">Editar</a>
                     </td>
-                    <td><a class="btn btn-danger">Deletar</a></td>
+                    <td><a class="btn btn-danger" @onclick="@(()=> DeletaCategoria(categoria.CategoriaId))">Deletar</a></td>
                 </tr>
             }
 
         </tbody>
     </table>
-
 }
+
+<Confirma @ref="confirma" onCancela="@CancelaConfirma" onConfirma="@DeletaConfirma">
+    <div>Deseja realmente excluir este item?</div>
+</Confirma>
 
 <div>
     <a class="btn btn-success" href="categoria/create">Criar Categoria</a>
 </div>
 
 @code {
+    Confirma confirma;
+    int codigoCategoria;
 
     public Categoria[] categorias { get; set; }
 
@@ -53,6 +58,25 @@ else
     {
         categorias = await http.GetFromJsonAsync<Categoria[]>("api/categoria/todas");
 
+    }
+
+    void DeletaCategoria(int id)
+    {
+        confirma.Exibir();
+        codigoCategoria = id;
+
+    }
+
+    async Task DeletaConfirma()
+    {
+        await http.DeleteAsync($"api/categoria/{codigoCategoria}");
+        confirma.Ocultar();
+        await CarregaCategorias();
+    }
+
+    void CancelaConfirma()
+    {
+        confirma.Ocultar();
     }
 
 }
