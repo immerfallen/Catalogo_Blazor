@@ -1,0 +1,48 @@
+﻿@page "/categoria/edit/{categoriaid:int}"
+@inject HttpClient http
+@inject NavigationManager navigationManager
+
+<h2>Editar Categoria</h2>
+
+<EditForm Model="@categoria" OnValidSubmit="@EditarCategoria">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+
+        <div class="form-group">
+            <label form="nome">Nome</label>
+            <div>
+                <InputText @bind-Value="@categoria.Nome" class="form-control"></InputText>
+                <ValidationMessage For="@(()=> categoria.Nome)"></ValidationMessage>
+            </div>
+            <label form="descricao">Descrição</label>
+            <div>
+                <InputText @bind-Value="@categoria.Descricao" class="form-control"></InputText>
+                <ValidationMessage For="@(()=> categoria.Descricao)"></ValidationMessage>
+            </div>
+        </div>
+        <br />
+        <button type="submit" class="btn btn-success">Alterar Dados</button>
+        <button class="btn btn-danger" @onclick="@(()=>navigationManager.NavigateTo("categoria"))"> Cancelar</button>
+
+   
+</EditForm>
+
+
+
+@code {
+    [Parameter]
+    public int categoriaid { get; set; }
+
+    Categoria categoria = new Categoria();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        categoria = await http.GetFromJsonAsync<Categoria>($"api/categoria/{categoriaid}");
+    }
+
+    async Task EditarCategoria()
+    {
+        await http.PutAsJsonAsync($"api/categoria", categoria);
+        navigationManager.NavigateTo("categoria");
+    }
+}
